@@ -1,42 +1,47 @@
-<template>
-  <modal :id="id" :max-width="maxWidth">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">
-          <slot name="title">
-          </slot>
-        </h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <slot name="content">
-        </slot>
-      </div>
-      <div class="modal-footer bg-light">
-        <slot name="footer">
-        </slot>
-      </div>
-    </div>
-  </modal>
-</template>
+<script setup>
+import Modal from './Modal.vue';
 
-<script>
-  import { defineComponent } from 'vue'
-  import Modal from './Modal.vue'
+const emit = defineEmits(['close']);
 
-  export default defineComponent({
-    components: {
-      Modal,
+defineProps({
+    show: {
+        type: Boolean,
+        default: false,
     },
-
-    props: {
-      id: {
+    maxWidth: {
         type: String,
-        required: true
-      },
-      maxWidth: {
-        default: '2xl'
-      }
-    }
-  })
+        default: '2xl',
+    },
+    closeable: {
+        type: Boolean,
+        default: true,
+    },
+});
+
+const close = () => {
+    emit('close');
+};
 </script>
+
+<template>
+    <Modal
+        :show="show"
+        :max-width="maxWidth"
+        :closeable="closeable"
+        @close="close"
+    >
+        <div class="px-6 py-4">
+            <div class="text-lg">
+                <slot name="title" />
+            </div>
+
+            <div class="mt-4">
+                <slot name="content" />
+            </div>
+        </div>
+
+        <div class="flex flex-row justify-end px-6 py-4 bg-gray-100 text-right">
+            <slot name="footer" />
+        </div>
+    </Modal>
+</template>

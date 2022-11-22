@@ -1,21 +1,24 @@
-<template>
-  <button type="submit" @click="$emit('clicked')" class="dropdown-item px-4" v-if="as == 'button'">
-    <slot></slot>
-  </button>
+<script setup>
+import { Link } from '@inertiajs/inertia-vue3';
 
-  <Link :href="href" class="dropdown-item px-4" v-else>
-    <slot></slot>
-  </Link>
-</template>
-
-<script>
-  import { defineComponent } from 'vue'
-  import { Link } from '@inertiajs/inertia-vue3'
-
-  export default defineComponent({
-    components: {
-      Link,
-    },
-    props: ['href', 'as']
-  })
+defineProps({
+    href: String,
+    as: String,
+});
 </script>
+
+<template>
+    <div>
+        <button v-if="as == 'button'" type="submit" class="block w-full px-4 py-2 text-sm leading-5 text-gray-700 text-left hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition">
+            <slot />
+        </button>
+
+        <a v-else-if="as =='a'" :href="href" class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition">
+            <slot />
+        </a>
+
+        <Link v-else :href="href" class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition">
+            <slot />
+        </Link>
+    </div>
+</template>
